@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../consts';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.author,
+  url: `${SITE.url}/about/`,
+  jobTitle: 'Staff Software Engineer',
+  worksFor: { '@type': 'Organization', name: 'Riskified' },
+  sameAs: [SITE.linkedin],
+};
+---
+
+<Base title="About" jsonLd={jsonLd}>
+  <div class="fn-prose">
+  <h1>About</h1>
+  <!-- TODO: this is the draft About from the LinkedIn rewrite. Edit it to taste. -->
+  <p>
+    I'm a Staff Software Engineer at Riskified with 12+ years in software, previously at Cyren, Behalf and Forcepoint.
+  </p>
+  <p>These days most of my thinking goes to one question: what changes when AI agents do real work?</p>
+  <p>
+    I test it on myself. I run a personal AI assistant on my own server. It reads my inbox, files insurance claims and
+    flight-compensation complaints, and can't send or delete anything without my yes. At work I look at the same
+    question from the team side: when code is cheap to write, review and trust become the bottleneck.
+  </p>
+  <p>I share the rules, the numbers and the mistakes.</p>
+  <p>Find me on <a href={SITE.linkedin}>LinkedIn</a>, or follow the <a href="/rss.xml">RSS feed</a>.</p>
+  </div>
+</Base>

@@ -1,0 +1,74 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../consts';
+import { getPosts, postUrl, postMarkdownUrl, longDate, type Post } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props as { post: Post };
+const { Content } = await render(post);
+const { data } = post;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: data.title,
+  description: data.description,
+  abstract: data.brief.claim,
+  datePublished: data.pubDate.toISOString(),
+  dateModified: (data.updatedDate ?? data.pubDate).toISOString(),
+  keywords: data.tags.join(', '),
+  url: postUrl(post),
+  mainEntityOfPage: postUrl(post),
+  author: { '@type': 'Person', name: SITE.author, url: `${SITE.url}/about/`, sameAs: [SITE.linkedin] },
+  encoding: { '@type': 'MediaObject', encodingFormat: 'text/markdown', contentUrl: postMarkdownUrl(post) },
+};
+---
+
+<Base title={data.title} description={data.description} markdownUrl={`/posts/${post.id}.md`} jsonLd={jsonLd} article>
+  <article>
+    <header>
+      <p class="fn-kicker">
+        Field note
+        <span>
+          &nbsp;·&nbsp; <time datetime={data.pubDate.toISOString()}>{longDate(data.pubDate)}</time>
+          {data.updatedDate && <Fragment> · updated <time datetime={data.updatedDate.toISOString()}>{longDate(data.updatedDate)}</time></Fragment>}
+        </span>
+      </p>
+      <h1 class="fn-title">{data.title}</h1>
+      {data.subtitle && <p class="fn-subtitle">{data.subtitle}</p>}
+      <div class="fn-tags">
+        {data.tags.map((tag) => <span>{tag}</span>)}
+        <a class="right" href={`/posts/${post.id}.md`}>Read as Markdown</a>
+      </div>
+    </header>
+    <div class="fn-columns">
+      <div class="fn-main">
+        <aside class="fn-brief" aria-label="Brief">
+          <div class="fn-brief__row"><span class="fn-brief__label">The claim</span><span class="fn-brief__text">{data.brief.claim}</span></div>
+          <div class="fn-brief__row"><span class="fn-brief__label">Who it's for</span><span class="fn-brief__text">{data.brief.audience}</span></div>
+          <div class="fn-brief__row"><span class="fn-brief__label">What to do</span><span class="fn-brief__text">{data.brief.action}</span></div>
+        </aside>
+        <div class="fn-prose fn-dropcap">
+          <Content />
+        </div>
+      </div>
+      {
+        data.figures.length > 0 && (
+          <aside class="fn-margin" aria-label="Figures from this post">
+            {data.figures.map((figure) => (
+              <div class="fn-figure">
+                <p class="fn-figure__value">{figure.value}</p>
+                <p class="fn-figure__caption">{figure.caption}</p>
+              </div>
+            ))}
+          </aside>
+        )
+      }
+    </div>
+  </article>
+</Base>

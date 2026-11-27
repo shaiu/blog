@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../consts';
+import { getPosts, postPath, longDate } from '../lib/posts';
+
+const posts = await getPosts();
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: SITE.title,
+  description: SITE.description,
+  url: SITE.url,
+  author: { '@type': 'Person', name: SITE.author, url: `${SITE.url}/about/`, sameAs: [SITE.linkedin] },
+};
+---
+
+<Base jsonLd={jsonLd}>
+  <p class="fn-lede">{SITE.tagline}</p>
+  <ul class="fn-list">
+    {
+      posts.map((post) => (
+        <li>
+          <time datetime={post.data.pubDate.toISOString()}>{longDate(post.data.pubDate)}</time>
+          <h2>
+            <a href={postPath(post)}>{post.data.title}</a>
+          </h2>
+          <p>{post.data.brief.claim}</p>
+        </li>
+      ))
+    }
+  </ul>
+</Base>
