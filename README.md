@@ -32,6 +32,7 @@ The Git integration's settings live in the Cloudflare dashboard, on the `blog` W
 | Build command | `npm run build` |
 | Deploy command | `npx wrangler deploy` |
 | Root directory | `/` |
+| Enable Preview Builds (under Branch control) | Off. With it on, every other branch fails its check, because `wrangler.jsonc` has no `previews` block |
 
 The build takes its Node version from `.node-version`. It does not run `npm test`, so run that before you push.
 
