@@ -35,6 +35,19 @@ The Git integration's settings live in the Cloudflare dashboard, on the `blog` W
 
 The build takes its Node version from `.node-version`. It does not run `npm test`, so run that before you push.
 
+Two rules on the `shaiungar.me` zone also live only in the dashboard, under Rules. Another site uses the root domain, so both match the blog's hostname alone. Keep it that way: don't select "All incoming requests", and don't change the zone-wide versions of these settings.
+
+**Configuration Rule `blog: allow agent clients`.** Turns off Browser Integrity Check, which returned a 403 to Python's built-in HTTP client (`Python-urllib`).
+
+- When: `http.host eq "blog.shaiungar.me"`
+- Setting: Browser Integrity Check off
+
+**Redirect Rule `blog: http to https`.**
+
+- When: `http.host eq "blog.shaiungar.me" and not ssl`
+- Dynamic target: `concat("https://", http.host, http.request.uri.path)`
+- Status code 301, with Preserve query string on
+
 ## Before you deploy
 
 1. Set your domain in `src/consts.ts` (`SITE.url`). Feeds, canonical links and the skill all use it.
