@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro build && wrangler dev",
+    "test": "node --test 'worker/*.test.js'",
+    "deploy": "astro build && wrangler deploy"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
@@ -14,5 +16,8 @@
     "@fontsource-variable/newsreader": "^5.3.0",
     "@fontsource/lato": "^5.3.0",
     "astro": "^7.4.13"
+  },
+  "devDependencies": {
+    "wrangler": "^4.168.0"
   }
 }

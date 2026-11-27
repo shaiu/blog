@@ -1,0 +1,14 @@
+# Content types for the machine-readable files. Cloudflare reads this file and
+# does not serve it. Astro's endpoint headers are ignored in a static build.
+/feed.json
+  Content-Type: application/feed+json; charset=utf-8
+/rss.xml
+  Content-Type: application/xml; charset=utf-8
+/posts/*.md
+  Content-Type: text/markdown; charset=utf-8
+/skill.md
+  Content-Type: text/markdown; charset=utf-8
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+/robots.txt
+  Content-Type: text/plain; charset=utf-8
