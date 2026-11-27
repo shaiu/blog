@@ -9,7 +9,7 @@ npm install
 npm run dev      # http://localhost:4321 (Astro only)
 npm run build    # static site in dist/
 npm run preview  # build, then serve through the Cloudflare runtime, as in production
-npm test         # tests for the Worker
+npm test         # tests for the Worker and the social images
 ```
 
 Needs the Node version in `.node-version`.
@@ -56,6 +56,10 @@ Post text.
 
 The build fails if a post has no `brief`. `figures` are optional: up to four real numbers from the post, shown in the margin. Numbered lists in a post are set as the rule list (hairlines and italic numerals). Set `draft: true` to keep a post out of the site and the feeds.
 
+## Social preview images
+
+The build draws a 1200x630 PNG for each post (`/og/posts/<name>.png`) and one for all other pages (`/og/default.png`). `src/lib/og-card.ts` takes the colours from the light theme in `Base.astro` and the fonts from the `@fontsource` packages, and makes no network calls. If a title uses a character these fonts do not have (emoji, Hebrew), the build fails and names the character.
+
 ## Design
 
 The look follows the Shai Ungar Blog design system: Newsreader for titles and text, Lato for small labels, one accent colour, hairlines instead of boxes, and light and dark themes that follow the reader's system setting. The tokens are CSS custom properties at the top of the global styles in `src/layouts/Base.astro`; change a colour there and it changes everywhere. Both fonts are self-hosted through the `@fontsource` packages, so the site makes no third-party requests.
@@ -76,6 +80,5 @@ Each post page also carries schema.org `BlogPosting` JSON-LD.
 
 ## Not built yet
 
-- Per-post social preview images.
 - Audio versions and a podcast feed.
 - An MCP server.
