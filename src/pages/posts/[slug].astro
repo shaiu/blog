@@ -29,7 +29,7 @@ const jsonLd = {
 };
 ---
 
-<Base title={data.title} description={data.description} markdownUrl={`/posts/${post.id}.md`} jsonLd={jsonLd} article>
+<Base title={data.title} description={data.description} markdownUrl={`/posts/${post.id}.md`} jsonLd={jsonLd} article image={{ path: `/og/posts/${post.id}.png`, alt: data.title }}>
   <article>
     <header>
       <p class="fn-kicker">
