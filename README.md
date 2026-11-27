@@ -24,6 +24,17 @@ The site is a Cloudflare Worker with static assets, at https://blog.shaiungar.me
 | `public/_headers` | Content types for the feeds and the text files. A static build ignores the headers set in Astro endpoints, so a new machine-readable file may need a rule here |
 | `worker/index.js` | Answers `Accept: text/markdown` on a post address with the Markdown copy. It runs only for `/posts/*`; other requests are free static asset requests |
 
+The Git integration's settings live in the Cloudflare dashboard, on the `blog` Worker under Settings, not in this repo. If you ever reconnect it:
+
+| Setting | Value |
+| --- | --- |
+| Repository and branch | `shaiu/blog`, `main` only |
+| Build command | `npm run build` |
+| Deploy command | `npx wrangler deploy` |
+| Root directory | `/` |
+
+The build takes its Node version from `.node-version`. It does not run `npm test`, so run that before you push.
+
 ## Before you deploy
 
 1. Set your domain in `src/consts.ts` (`SITE.url`). Feeds, canonical links and the skill all use it.
