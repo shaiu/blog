@@ -6,9 +6,23 @@ A static Astro blog that is equally easy to read for people and for their AI age
 
 ```sh
 npm install
-npm run dev      # http://localhost:4321
+npm run dev      # http://localhost:4321 (Astro only)
 npm run build    # static site in dist/
+npm run preview  # build, then serve through the Cloudflare runtime, as in production
+npm test         # tests for the Worker
 ```
+
+Needs the Node version in `.node-version`.
+
+## Deploy
+
+The site is a Cloudflare Worker with static assets, at https://blog.shaiungar.me. Cloudflare's Git integration (Workers Builds) builds and deploys each push to `main`. `npm run deploy` does the same from your machine.
+
+| File | What it does |
+| --- | --- |
+| `wrangler.jsonc` | Worker name, assets directory and the custom domain |
+| `public/_headers` | Content types for the feeds and the text files. A static build ignores the headers set in Astro endpoints, so a new machine-readable file may need a rule here |
+| `worker/index.js` | Answers `Accept: text/markdown` on a post address with the Markdown copy. It runs only for `/posts/*`; other requests are free static asset requests |
 
 ## Before you deploy
 
@@ -53,6 +67,7 @@ The look follows the Shai Ungar Blog design system: Newsreader for titles and te
 | `/feed.json` | JSON Feed 1.1, full text, with the brief as `_brief` on each item |
 | `/rss.xml` | RSS with full text; the item description is the brief |
 | `/posts/<name>.md` | Markdown copy of a post, linked from the page with `rel="alternate"` |
+| `/posts/<name>/` with `Accept: text/markdown` | The same Markdown copy, at the post address (`Vary: Accept`) |
 | `/llms.txt` | Index of posts with their claims |
 | `/skill.md` | Skill a reader can give their agent; also shown on `/agents/` |
 | `/robots.txt` | Crawl rules and Content-Signal usage policy |
@@ -61,7 +76,6 @@ Each post page also carries schema.org `BlogPosting` JSON-LD.
 
 ## Not built yet
 
-- Serving Markdown at the post address when a client sends `Accept: text/markdown`. A static site cannot do this; it needs a rule at the CDN or host.
 - Per-post social preview images.
 - Audio versions and a podcast feed.
 - An MCP server.

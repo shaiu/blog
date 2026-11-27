@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Must match the Worker's name in the dashboard, or Workers Builds fails.
+  "name": "blog",
+  "compatibility_date": "2026-11-27",
+  "main": "./worker/index.js",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    // The Worker runs only for post pages, to serve Markdown on request.
+    // Everything else is a plain static asset (free, no code involved).
+    "run_worker_first": ["/posts/*", "!/posts/*.md"]
+  },
+  // Only the blog subdomain. The root domain belongs to another Worker.
+  "routes": [{ "pattern": "blog.shaiungar.me", "custom_domain": true }],
+  "workers_dev": false,
+  "preview_urls": false
+}
