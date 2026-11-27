@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { SITE } from '../consts';
+import portrait from '../assets/shai-funko.png';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -16,6 +18,15 @@ const jsonLd = {
 <Base title="About" jsonLd={jsonLd}>
   <div class="fn-prose">
   <h1>About</h1>
+  <Image
+    class="portrait"
+    src={portrait}
+    alt={`${SITE.author} as a Funko Pop-style figure`}
+    width={200}
+    height={200}
+    densities={[2]}
+    loading="eager"
+  />
   <p>
     I'm a Staff Software Engineer at Riskified with 12+ years in software, previously at Cyren, Behalf and Forcepoint.
     I'm married, with three kids.
@@ -34,3 +45,19 @@ const jsonLd = {
   <p>Find me on <a href={SITE.linkedin}>LinkedIn</a>, or follow the <a href="/rss.xml">RSS feed</a>.</p>
   </div>
 </Base>
+
+<style>
+  .portrait {
+    float: right;
+    margin: 6px 0 var(--space-4) var(--space-5);
+    border-radius: var(--radius-md);
+  }
+  @media (max-width: 640px) {
+    .portrait {
+      float: none;
+      display: block;
+      width: 180px;
+      margin: 0 0 var(--space-5);
+    }
+  }
+</style>
